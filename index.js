@@ -3,10 +3,10 @@ import * as dotenv from 'dotenv';
 
 import changelog from './changelog.json';
 
-import { name, version } from './src/_constants.js';
+import { name, version, onCalendlyEvent } from './src/_constants.js';
 import { settings } from './src/settings.js';
-import { klasses } from './src/klasses.js';
 import { i18n } from './src/i18n.js';
+import { event } from './src/klasses.js';
 import { Calendly } from './src/Calendly';
 
 // Register dotenv
@@ -78,8 +78,8 @@ app.onInstall = async (_user, org) => {
   }
 };
 
-// For each Klass we need to create, instantiate it
-klasses.forEach(({ name, mapKObject, ...k }) => app.useKlass(name, k));
+// Create the event klass
+app.useKlass(event.name, event.schema);
 
 // TODO: Create the view
 
@@ -95,7 +95,7 @@ klasses.forEach(({ name, mapKObject, ...k }) => app.useKlass(name, k));
     calendly = new Calendly(allSettings?.default.authToken, app);
 
     // Set up the hook to listen to Calendly, when fired it will call the event handler
-    app.onHook(SUBSCRIPTION_EVENT, handlers.onSubscriptionEvent(app, calendly));
+    app.onHook(onCalendlyEvent, handleCalendlyEvent(app, calendly));
   } catch (e) {
     app.log.error(JSON.stringify(e, undefined, 2));
   }
