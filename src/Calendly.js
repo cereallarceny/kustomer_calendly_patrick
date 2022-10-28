@@ -1,4 +1,4 @@
-import { onCalendlyEvent, calendlyEvents } from './_constants';
+import { onCalendlyEvent, calendlyEvents } from './_constants.js';
 
 export class Calendly {
   // Store the baseUrl, token, and Kustomer app here

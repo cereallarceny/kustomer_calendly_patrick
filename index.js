@@ -7,7 +7,8 @@ import { name, version, onCalendlyEvent } from './src/_constants.js';
 import { settings } from './src/settings.js';
 import { i18n } from './src/i18n.js';
 import { event } from './src/klasses.js';
-import { Calendly } from './src/Calendly';
+import { handleCalendlyEvent } from './src/handlers.js';
+import { Calendly } from './src/Calendly.js';
 
 // Register dotenv
 dotenv.config();
@@ -81,7 +82,15 @@ app.onInstall = async (_user, org) => {
 // Create the event klass
 app.useKlass(event.name, event.schema);
 
-// TODO: Create the view
+// Create the event view
+app.useView(`${name}-event-kview`, './src/eventView.jsx', {
+  resource: 'kobject',
+  context: 'expanded-timeline',
+  displayName: 'Calendly Event',
+  icon: 'calendar',
+  state: 'open',
+  klass: 'calendly-sdk-event',
+});
 
 (async () => {
   try {

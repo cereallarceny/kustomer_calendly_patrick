@@ -1,4 +1,4 @@
-import { event as eventKlass } from './klasses';
+import { event as eventKlass } from './klasses.js';
 
 const createEventKobject = async (customers, event) => {
   // Get the customer by email from Kustomer
