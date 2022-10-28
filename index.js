@@ -97,11 +97,8 @@ app.useView(`${name}-event-kview`, './src/eventView.jsx', {
     // Start the app
     await app.start({ port: +(process.env.PORT || 3000) });
 
-    // Get the settings for the app by app name
-    const allSettings = await app.in(name).settings.get();
-
     // Create an instance of the Calendly API
-    calendly = new Calendly(allSettings?.default.authToken, app);
+    calendly = new Calendly(settings?.default.authToken, app);
 
     // Set up the hook to listen to Calendly, when fired it will call the event handler
     app.onHook(onCalendlyEvent, handleCalendlyEvent(app, calendly));
