@@ -45,7 +45,7 @@ export const handleCalendlyEvent =
         await calendly.getEventResource(event_type);
 
       // Get the org object from the organization name
-      const Org = app.in(org);
+      const Org = app.org(org);
 
       // Get the kobject for this event
       const kobject = await Org.kobjects.getByExternalId(
