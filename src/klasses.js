@@ -1,7 +1,7 @@
 import { name } from './_constants.js';
 
 export const event = {
-  name: `${name}-event`,
+  name: 'event',
   schema: {
     icon: 'calendar',
     color: '#3e9cf0',

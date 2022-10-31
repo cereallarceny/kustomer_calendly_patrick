@@ -28,7 +28,7 @@ const app = new KApp({
   app: name,
   version,
   title: 'Kustomer Calendly Patrick',
-  visibility: 'private', // NOTE: For some reason, I can't do a public app?
+  visibility: 'private',
   description: 'This is the description for **Calendly App Tutorial**',
   dependencies: ['kustomer-^1.5.0'],
   default: false,
@@ -36,8 +36,8 @@ const app = new KApp({
   url: process.env.BASE_URL,
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  iconUrl: `${process.env.BASE_URL}/assets/images/icon.png`,
-  env: 'prod', // NOTE: I set this as "qa" when creating the repo... but I can't start the server if this isn't "prod" 🧐
+  iconUrl: `${process.env.BASE_URL}/assets/icon.png`,
+  env: 'prod',
   changelog,
   roles: [
     'org.user.customer.read',
@@ -83,7 +83,7 @@ app.onInstall = async (_user, org) => {
 app.useKlass(event.name, event.schema);
 
 // Create the event view
-app.useView(`${name}-event-kview`, './src/eventView.jsx', {
+app.useView('event-kview', './src/eventView.jsx', {
   resource: 'kobject',
   context: 'expanded-timeline',
   displayName: 'Calendly Event',

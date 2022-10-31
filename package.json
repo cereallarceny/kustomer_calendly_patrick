@@ -1,6 +1,6 @@
 {
-  "name": "kustomer_calendly_patrick",
-  "version": "0.0.1",
+  "name": "calendly_patrick",
+  "version": "0.0.10",
   "main": "index.js",
   "type": "module",
   "scripts": {

@@ -63,19 +63,6 @@ const data = this;
           />
         </Column>
       </Grid>
-      <Grid>
-        <Column size="sixteen">
-          <h4>Questions / Answers</h4>
-          {data.kobject.data.payload.questions_and_answers.map((lineItem) => (
-            <Grid>
-              <Column size="sixteen">
-                <BasicField label="Question" value={lineItem.question} />
-                <BasicField label="Answer" value={lineItem.answer} />
-              </Column>
-            </Grid>
-          ))}
-        </Column>
-      </Grid>
     </Segment>
   ) : null}
 </div>;
