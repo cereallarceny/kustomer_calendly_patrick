@@ -1,3 +1,4 @@
+import fs from 'fs';
 import { KApp } from '@kustomer/apps-server-sdk';
 import * as dotenv from 'dotenv';
 
@@ -72,10 +73,19 @@ app.onInstall = async (_user, org) => {
   try {
     app.log.info('Installed app, registering Calendly webhooks');
 
+    // Get the settings
+    const allSettings = await app.org(org).settings.get();
+
+    // Create an instance of the Calendly API
+    calendly = new Calendly(allSettings?.default.authToken, app);
+
     // Register the webhooks we need with the calendly API
-    await Calendly.registerWebhooks(org);
+    await calendly.registerWebhooks(org);
+
+    // Set up the hook to listen to Calendly, when fired it will call the event handler
+    app.onHook(onCalendlyEvent, handleCalendlyEvent(app, calendly));
   } catch (e) {
-    app.log.error(JSON.stringify(e, undefined, 2));
+    app.log.error(e);
   }
 };
 
@@ -83,26 +93,24 @@ app.onInstall = async (_user, org) => {
 app.useKlass(event.name, event.schema);
 
 // Create the event view
-app.useView('event-kview', './src/eventView.jsx', {
-  resource: 'kobject',
-  context: 'expanded-timeline',
-  displayName: 'Calendly Event',
-  icon: 'calendar',
-  state: 'open',
-  klass: 'calendly-sdk-event',
-});
+app.useView(
+  'event-kview',
+  fs.readFileSync('./src/eventView.jsx', { encoding: 'utf-8' }),
+  {
+    resource: 'kobject',
+    context: 'expanded-timeline',
+    displayName: 'Calendly Event',
+    icon: 'calendar',
+    state: 'open',
+    klass: 'calendly-sdk-event',
+  }
+);
 
 (async () => {
   try {
     // Start the app
     await app.start({ port: +(process.env.PORT || 3000) });
-
-    // Create an instance of the Calendly API
-    calendly = new Calendly(settings?.default.authToken, app);
-
-    // Set up the hook to listen to Calendly, when fired it will call the event handler
-    app.onHook(onCalendlyEvent, handleCalendlyEvent(app, calendly));
   } catch (e) {
-    app.log.error(JSON.stringify(e, undefined, 2));
+    app.log.error(e);
   }
 })();

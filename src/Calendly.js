@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 import { onCalendlyEvent, calendlyEvents } from './_constants.js';
 
 export class Calendly {
@@ -28,13 +29,17 @@ export class Calendly {
 
   // Get the current user of the Calendly account
   async getCurrentUser() {
-    const res = await fetch(`${this.baseUrl}/users/me`, this.headers);
+    const res = await fetch(`${this.baseUrl}/users/me`, this.headers).then(
+      (r) => r.json()
+    );
+
     return res?.data?.resource;
   }
 
   // Get an event from the Calendly API
   async getEventResource(url) {
-    const res = await fetch(url, this.headers);
+    const res = await fetch(url, this.headers).then((r) => r.json());
+
     return res?.data?.resource;
   }
 
@@ -60,7 +65,7 @@ export class Calendly {
     const res = await fetch(
       `${this.baseUrl}/webhook_subscriptions?scope=organization&organization=${user.current_organization}`,
       this.headers
-    );
+    ).then((r) => r.json());
 
     return res?.data;
   }
@@ -79,7 +84,7 @@ export class Calendly {
     const res = await fetch(`${this.baseUrl}/webhook_subscriptions`, {
       body: payload,
       ...this.headers,
-    });
+    }).then((r) => r.json());
 
     return res?.data?.resource;
   }

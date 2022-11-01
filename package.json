@@ -1,6 +1,6 @@
 {
-  "name": "calendly_patrick",
-  "version": "0.0.10",
+  "name": "calendly_patrick_app",
+  "version": "0.0.18",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "@kustomer/apps-server-sdk": "^0.0.52",
-    "dotenv": "^16.0.1"
+    "dotenv": "^16.0.1",
+    "node-fetch": "^3.2.10"
   },
   "devDependencies": {
     "sinon": "^14.0.1"
