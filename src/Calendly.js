@@ -33,14 +33,14 @@ export class Calendly {
       (r) => r.json()
     );
 
-    return res?.data?.resource;
+    return res?.resource;
   }
 
   // Get an event from the Calendly API
   async getEventResource(url) {
     const res = await fetch(url, this.headers).then((r) => r.json());
 
-    return res?.data?.resource;
+    return res?.resource;
   }
 
   // Get the events that haven't already been registered in Calendly as webhooks
@@ -67,7 +67,7 @@ export class Calendly {
       this.headers
     ).then((r) => r.json());
 
-    return res?.data;
+    return res;
   }
 
   // Create a given set of webhooks in Calendly
@@ -82,11 +82,12 @@ export class Calendly {
     };
 
     const res = await fetch(`${this.baseUrl}/webhook_subscriptions`, {
-      body: payload,
+      body: JSON.stringify(payload),
+      method: 'POST',
       ...this.headers,
     }).then((r) => r.json());
 
-    return res?.data?.resource;
+    return res?.resource;
   }
 
   // Register the webhooks we need with the calendly API

@@ -1,4 +1,5 @@
 import { event as eventKlass } from './klasses.js';
+import { getInviteId } from './_helpers.js';
 
 const createEventKobject = async (customers, event) => {
   // Get the customer by email from Kustomer
@@ -17,6 +18,7 @@ const createEventKobject = async (customers, event) => {
   customer = await customers.create({
     name: event.calendly.name,
     emails: [{ email: event.calendly.email }],
+    externalId: getInviteId(event.calendly.uri),
   });
 
   // And then create their kobject
@@ -49,7 +51,7 @@ export const handleCalendlyEvent =
 
       // Get the kobject for this event
       const kobject = await Org.kobjects.getByExternalId(
-        body.payload.uri,
+        getInviteId(body.payload.uri),
         eventKlass.name
       );
 
@@ -65,7 +67,6 @@ export const handleCalendlyEvent =
           eventStartTime: start_time,
           eventEndTime: end_time,
           status: body.payload.status,
-          qAndA: body.payload?.questions_and_answers,
           eventUpdatedAt: body.payload.updated_at,
           canceledReason: body.payload?.cancellation?.reason,
           eventLocation: body.payload?.location?.location,

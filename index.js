@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { KApp } from '@kustomer/apps-server-sdk';
+import { KApp, ROLES } from '@kustomer/apps-server-sdk';
 import * as dotenv from 'dotenv';
 
 import changelog from './changelog.json';
@@ -40,15 +40,7 @@ const app = new KApp({
   iconUrl: `${process.env.BASE_URL}/assets/icon.png`,
   env: 'prod',
   changelog,
-  roles: [
-    'org.user.customer.read',
-    'org.user.customer.write',
-    'org.user.message.read',
-    'org.permission.customer.read',
-    'org.permission.customer.create',
-    'org.permission.customer.update',
-    'org.permission.message.read',
-  ],
+  roles: ROLES.common,
   appDetails: {
     appDeveloper: {
       name: 'Kustomer',
@@ -65,9 +57,6 @@ const app = new KApp({
   i18n,
 });
 
-// Create a variable to hold the Calendly API
-let calendly;
-
 // When the user installs the Kustomer app
 app.onInstall = async (_user, org) => {
   try {
@@ -77,7 +66,7 @@ app.onInstall = async (_user, org) => {
     const allSettings = await app.org(org).settings.get();
 
     // Create an instance of the Calendly API
-    calendly = new Calendly(allSettings?.default.authToken, app);
+    const calendly = new Calendly(allSettings?.default.authToken, app);
 
     // Register the webhooks we need with the calendly API
     await calendly.registerWebhooks(org);
@@ -94,7 +83,7 @@ app.useKlass(event.name, event.schema);
 
 // Create the event view
 app.useView(
-  'event-kview',
+  'event-view',
   fs.readFileSync('./src/eventView.jsx', { encoding: 'utf-8' }),
   {
     resource: 'kobject',
@@ -102,7 +91,7 @@ app.useView(
     displayName: 'Calendly Event',
     icon: 'calendar',
     state: 'open',
-    klass: 'calendly-sdk-event',
+    klass: event.name,
   }
 );
 

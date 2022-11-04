@@ -1,4 +1,4 @@
-import { name } from './_constants.js';
+import { getInviteId } from './_helpers.js';
 
 export const event = {
   name: 'event',
@@ -56,6 +56,6 @@ export const event = {
     },
     data: { payload: event },
     title: event.eventName,
-    externalId: event.uri,
+    externalId: getInviteId(event.uri),
   }),
 };
